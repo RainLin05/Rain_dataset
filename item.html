@@ -5,35 +5,42 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data</title>
-    <script src="data.js"></script>
     <div>
-        <canvas id="myChart"></canvas>
-      </div>
-      
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      
-      <script>
-        const ctx = document.getElementById('myChart');
-      
-        new Chart(ctx, {
-          type: 'bar',
+      <canvas id="myChart"></canvas>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+      async function getData() {
+    const response = await fetch("ZonAnn.Ts+dSST.csv");
+    const data = await response.text();
+    const rows = data.split("\n").slice(1);
+    const list = [];
+    rows.forEach((elem) => {
+              const row = elem.split(",");
+              const year = row[0];
+              const temp = row[1];
+              list[elem] = {x: year, y: temp}
+            });
+    return list
+    }
+    //end of functions
+    //call the function to test if you see the image on the left in the console
+    
+
+      async function display() {
+      const ctx = document.getElementById('myChart');
+    
+      new Chart(ctx, {
+          type: 'line',
           data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true
-              }
-            }
+            datasets: [getData()]
           }
-        });
-      </script>
+      })
+      }
+      
+    </script>
 </head>
 <body>
     
